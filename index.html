@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>LeonChat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen">
+        <h1>LeonChat</h1>
+        <input type="text" id="username" placeholder="Benutzername">
+        <input type="password" id="password" placeholder="Passwort">
+        <button id="login-btn">Einloggen</button>
+        <p id="login-error"></p>
+    </div>
+
+    <div id="chat-screen" class="hidden">
+        <div id="user-list">
+            <h2>Kontakte</h2>
+            <ul id="contacts"></ul>
+        </div>
+        <div id="chat-window">
+            <div id="messages"></div>
+            <div id="chat-input">
+                <input type="text" id="message-input" placeholder="Nachricht...">
+                <button id="emoji-btn">😊</button>
+                <input type="file" id="file-input">
+                <button id="send-btn">Senden</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
