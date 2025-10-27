@@ -9,10 +9,12 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 clients = {}
 
 from flask import Flask, render_template
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
-app = Flask(__name__, static_url_path="", static_folder=".", template_folder=".")
-socketio = SocketIO(app, cors_allowed_origins="*")
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+
 
 @app.route("/")
 def index():
