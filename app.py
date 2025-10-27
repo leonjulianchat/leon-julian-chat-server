@@ -8,9 +8,19 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 
 clients = {}
 
+from flask import Flask, render_template
+from flask_socketio import SocketIO
+
+app = Flask(__name__, static_url_path="", static_folder=".", template_folder=".")
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 @app.route("/")
 def index():
-    return "Leon-Julian Chat Relay is running."
+    return render_template("index.html")
+
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=10000, allow_unsafe_werkzeug=True)
+
 
 @socketio.on("connect")
 def handle_connect():
