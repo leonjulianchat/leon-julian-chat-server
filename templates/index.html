@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeonChat – Messenger 2009</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <div class="msn-window">
+    <div class="title-bar">
+      <div class="window-title">LeonChat – Messenger</div>
+      <div class="status-dot online"></div>
+    </div>
+
+    <div class="chat-container">
+      <div class="messages" id="messages"></div>
+
+      <form id="chat-form">
+        <div class="input-area">
+          <input id="message-input" autocomplete="off" placeholder="Nachricht eingeben..." />
+          <label for="file-upload" class="upload-btn">📎</label>
+          <input id="file-upload" type="file" hidden />
+          <button type="submit" class="send-btn">Senden 💬</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const socket = io();
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("message-input");
+    const messages = document.getElementById("messages");
+
+    socket.on("connect", () => {
+      const msg = document.createElement("div");
+      msg.classList.add("system");
+      msg.textContent = "🟢 Verbunden mit LeonChat-Server.";
+      messages.appendChild(msg);
+    });
+
+    socket.on("message", (data) => {
+      const msg = document.createElement("div");
+      msg.classList.add("message");
+      msg.innerHTML = `<strong>${data.user}:</strong> ${data.msg}`;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (input.value.trim() !== "") {
+        socket.emit("message", { user: "Du", msg: input.value });
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
