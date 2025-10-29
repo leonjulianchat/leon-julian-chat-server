@@ -1,52 +1,75 @@
-const socket = io("https://leon-julian-chat-server.onrender.com");
-let currentUser = null;
+// === LeonChat – MSN 2009 Style ===
 
-// Login
-document.getElementById("login-btn").addEventListener("click", () => {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    if(!username || !password) return;
+// SOCKET.IO CONNECTION
+const socket = io("https://leon-julian-chat-server.onrender.com"); // dein Render-Server
 
-    socket.emit("login", {username, password});
+// === ELEMENTE HOLEN ===
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const chatBox = document.getElementById("chatBox");
+const themeSwitch = document.getElementById("themeSwitch");
+const fileInput = document.getElementById("fileInput");
+const onlineDot = document.getElementById("statusDot");
+
+// === SOUND ===
+const msnSound = new Audio("https://win98icons.alexmeub.com/sounds/MSN_Receive.mp3");
+
+// === THEME SWITCH ===
+themeSwitch.addEventListener("change", () => {
+  document.body.classList.toggle("dark", themeSwitch.checked);
+  localStorage.setItem("theme", themeSwitch.checked ? "dark" : "light");
 });
 
-socket.on("login_success", (data) => {
-    currentUser = data.username;
-    document.getElementById("login-screen").classList.add("hidden");
-    document.getElementById("chat-screen").classList.remove("hidden");
-    updateContacts(data.contacts);
-});
-
-socket.on("login_error", (msg) => {
-    document.getElementById("login-error").innerText = msg;
-});
-
-// Kontakte aktualisieren
-function updateContacts(list) {
-    const contactsUl = document.getElementById("contacts");
-    contactsUl.innerHTML = "";
-    list.forEach(user => {
-        const li = document.createElement("li");
-        li.innerText = user.username;
-        li.className = user.online ? "online" : "offline";
-        contactsUl.appendChild(li);
-    });
+// Theme beim Laden merken
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+  themeSwitch.checked = true;
 }
 
-// Nachrichten senden
-document.getElementById("send-btn").addEventListener("click", () => {
-    const msgInput = document.getElementById("message-input");
-    const message = msgInput.value.trim();
-    if(!message) return;
-    socket.emit("send_message", {from: currentUser, message});
-    msgInput.value = "";
+// === MESSAGE SENDEN ===
+sendButton.addEventListener("click", sendMessage);
+messageInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
 });
 
-// Nachrichten empfangen
-socket.on("receive_message", (data) => {
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "message" + (data.from === currentUser ? " self" : "");
-    msgDiv.innerText = `${data.from}: ${data.message}`;
-    document.getElementById("messages").appendChild(msgDiv);
-    msgDiv.scrollIntoView();
+function sendMessage() {
+  const msg = messageInput.value.trim();
+  if (msg !== "") {
+    socket.emit("message", msg);
+    appendMessage("self", msg);
+    messageInput.value = "";
+  }
+}
+
+// === DATEI-UPLOAD ===
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) {
+    appendMessage("self", `📎 <i>${file.name}</i> wurde angehängt`);
+  }
+});
+
+// === EMPFANGENE NACHRICHTEN ===
+socket.on("message", (msg) => {
+  appendMessage("other", msg);
+  msnSound.currentTime = 0;
+  msnSound.play().catch(() => {});
+});
+
+// === NACHRICHT IN CHAT-FENSTER ANZEIGEN ===
+function appendMessage(type, text) {
+  const msgEl = document.createElement("div");
+  msgEl.classList.add("message", type);
+  msgEl.innerHTML = text;
+  chatBox.appendChild(msgEl);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// === ONLINE-STATUS ===
+socket.on("connect", () => {
+  onlineDot.classList.add("online");
+});
+
+socket.on("disconnect", () => {
+  onlineDot.classList.remove("online");
 });
