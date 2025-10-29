@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LeonChat – Online</title>
+  <title>💬 LeonChat – Online</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="window">
-    <div class="titlebar">
-      <div class="title">💬 LeonChat – Online</div>
+  <div id="chatWindow" class="window">
+    <div class="title-bar">
+      <span class="title">💬 LeonChat – Online</span>
       <div class="window-controls">
         <button class="minimize">🗕</button>
         <button class="maximize">🗖</button>
@@ -17,30 +17,30 @@
       </div>
     </div>
 
-    <div class="chat-container">
-      <div class="chat-box" id="chatBox">
-        <div class="message other">Willkommen bei <b>LeonChat</b> 💫</div>
-      </div>
-
-      <div class="input-area">
-        <input id="messageInput" type="text" placeholder="Nachricht eingeben..." />
-        <button id="emojiBtn">😊</button>
-        <button id="fileBtn">📎</button>
-        <button id="sendBtn">Senden</button>
+    <div class="chat-header">
+      <h2>Willkommen bei <span class="highlight">LeonChat</span> 👋</h2>
+      <div id="status">
+        <span id="statusDot" class="status-dot"></span> Verbunden
       </div>
     </div>
 
-    <div class="status-bar">
-      <div class="status">
-        <span class="status-dot online"></span> Verbunden
-      </div>
-      <div class="theme-toggle">
-        <label class="switch">
-          <input type="checkbox" id="themeSwitch" />
-          <span class="slider"></span>
-        </label>
-        <span class="theme-label">🌞 / 🌙</span>
-      </div>
+    <div id="chatBox" class="chat-box">
+      <!-- Nachrichten erscheinen hier -->
+    </div>
+
+    <div class="input-area">
+      <input id="messageInput" type="text" placeholder="Nachricht eingeben..." />
+      <button id="emojiButton">😊</button>
+      <input type="file" id="fileInput" style="display:none" />
+      <button id="fileButton">📎</button>
+      <button id="sendButton">Senden</button>
+    </div>
+
+    <div class="bottom-bar">
+      <label>
+        <input type="checkbox" id="themeSwitch" />
+        🌞 / 🌙
+      </label>
     </div>
   </div>
 
