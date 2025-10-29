@@ -1,73 +1,80 @@
-alte style.css
+/* ===========================
+   🌈 LeonChat – MSN 2009 / Aero Edition
+   =========================== */
+
 body {
-  background: radial-gradient(circle at top left, #bcd3ee 0%, #e8f1fa 100%);
+  background: radial-gradient(circle at top left, #b4c8e6 0%, #dce9f7 60%, #f4f8fc 100%);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #111;
+  overflow: hidden;
 }
 
+/* Fensterrahmen – Glas mit Schimmer */
 .msn-window {
-  width: 500px;
-  height: 630px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  background: rgba(255,255,255,0.35);
-  backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.5);
+  width: 520px;
+  height: 640px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.9),
+    0 0 25px rgba(0, 0, 0, 0.4),
+    0 8px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: fadeIn 0.8s ease-in-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* Titelzeile im Windows-7-Aero-Stil */
 .title-bar {
-  background: linear-gradient(to bottom, rgba(105,160,255,0.9), rgba(20,90,200,0.9));
+  background: linear-gradient(to bottom, #4598ff 0%, #1b67d3 100%);
   color: white;
   padding: 10px 14px;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 15px;
   letter-spacing: 0.3px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: inset 0 -1px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.3);
-  border-bottom: 1px solid rgba(255,255,255,0.5);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
+/* Online-Indikator mit Glow */
 .status-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   margin-left: 8px;
-  box-shadow: 0 0 8px rgba(0,255,0,0.6);
+  background-color: #00ff4c;
+  box-shadow: 0 0 10px #00ff4c, 0 0 3px rgba(0, 0, 0, 0.4);
 }
 
-.online {
-  background-color: #00ff00;
-}
-
+/* Nachrichtenbereich */
 .chat-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to bottom right, rgba(250,250,255,0.8), rgba(230,240,255,0.8));
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.7), rgba(235, 245, 255, 0.7));
 }
 
+/* Verlauf + Glas + sanfte Scrollbar */
 .messages {
   flex: 1;
-  padding: 12px;
+  padding: 14px;
   overflow-y: auto;
-  color: #000;
   scrollbar-width: thin;
-  scrollbar-color: #58a6ff #dfe9f3;
+  scrollbar-color: #70b2ff #e6edf7;
 }
 
 .messages::-webkit-scrollbar {
@@ -75,81 +82,103 @@ body {
 }
 
 .messages::-webkit-scrollbar-thumb {
-  background-color: #58a6ff;
+  background: linear-gradient(to bottom, #69b0ff, #337ce3);
   border-radius: 8px;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
+/* Nachricht-Blasen */
 .message {
-  padding: 8px 10px;
-  background: rgba(255,255,255,0.75);
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 10px;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  transition: transform 0.1s ease-in-out;
+  margin-bottom: 10px;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.9),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease-in-out;
+  backdrop-filter: blur(10px);
 }
 
 .message:hover {
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
+/* Systemmeldungen */
 .system {
-  color: #0078d4;
+  color: #0066cc;
   font-style: italic;
   margin-bottom: 8px;
-  text-shadow: 0 0 6px rgba(173,216,255,0.8);
+  text-shadow: 0 0 6px rgba(173, 216, 255, 0.7);
 }
 
+/* Eingabebereich */
 .input-area {
   display: flex;
   align-items: center;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(235,235,255,0.9));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(230, 235, 255, 0.9));
   padding: 10px;
-  border-top: 1px solid rgba(200,200,255,0.6);
-  box-shadow: inset 0 1px rgba(255,255,255,0.5);
+  border-top: 1px solid rgba(200, 200, 255, 0.6);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5);
 }
 
+/* Eingabefeld */
 #message-input {
   flex: 1;
-  padding: 8px;
-  border: 1px solid rgba(150,150,200,0.8);
+  padding: 9px;
+  border: 1px solid rgba(150, 150, 200, 0.8);
   border-radius: 8px;
   outline: none;
-  background: rgba(255,255,255,0.8);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease-in-out;
 }
 
 #message-input:focus {
   border-color: #58a6ff;
-  box-shadow: 0 0 5px rgba(88,166,255,0.8);
+  box-shadow: 0 0 6px rgba(88, 166, 255, 0.8);
 }
 
+/* Anhang-Button 📎 */
 .upload-btn {
   margin: 0 8px;
   font-size: 22px;
   cursor: pointer;
-  filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
-  transition: transform 0.15s ease-in-out;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
+  transition: transform 0.15s ease-in-out, filter 0.3s;
 }
 
 .upload-btn:hover {
-  transform: scale(1.2);
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 5px rgba(100, 180, 255, 0.7));
 }
 
+/* Senden-Button */
 .send-btn {
-  background: linear-gradient(to bottom, #7ab5ff, #3c8aff);
+  background: linear-gradient(to bottom, #87c0ff, #2b75e2);
   color: white;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  text-shadow: 0 0 3px rgba(0,0,0,0.3);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  font-weight: 600;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.25);
   transition: all 0.2s ease-in-out;
 }
 
 .send-btn:hover {
-  background: linear-gradient(to bottom, #8cc2ff, #4d9aff);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  background: linear-gradient(to bottom, #9dd0ff, #3f88f7);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
   transform: translateY(-1px);
 }
+
+/* Fade-In */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
