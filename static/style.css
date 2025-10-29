@@ -2,79 +2,129 @@
    🌈 LeonChat – MSN 2009 / Aero Edition
    =========================== */
 
+:root {
+  --glass-light: rgba(255,255,255,0.35);
+  --glass-dark: rgba(25,25,25,0.45);
+  --text-color: #000;
+  --window-gradient: linear-gradient(to bottom, rgba(105,160,255,0.9), rgba(20,90,200,0.9));
+  --shadow-color: rgba(0,0,0,0.4);
+  --accent: #58a6ff;
+}
+
+body.dark {
+  --glass-light: rgba(40,40,40,0.65);
+  --glass-dark: rgba(10,10,10,0.85);
+  --text-color: #e8e8e8;
+  --window-gradient: linear-gradient(to bottom, rgba(50,50,50,0.9), rgba(10,10,10,0.9));
+  --shadow-color: rgba(0,0,0,0.8);
+  --accent: #7ab5ff;
+}
+
 body {
-  background: radial-gradient(circle at top left, #b4c8e6 0%, #dce9f7 60%, #f4f8fc 100%);
+  background: radial-gradient(circle at top left, #bcd3ee 0%, #e8f1fa 100%);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111;
-  overflow: hidden;
+  transition: background 0.6s ease-in-out;
 }
 
-/* Fensterrahmen – Glas mit Schimmer */
+body.dark {
+  background: radial-gradient(circle at bottom right, #0b0b0b 0%, #1a1a1a 100%);
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 1000;
+}
+
+#theme-toggle-btn {
+  background: var(--window-gradient);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+#theme-toggle-btn:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
 .msn-window {
-  width: 520px;
-  height: 640px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.45);
+  width: 500px;
+  height: 630px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px var(--shadow-color);
+  background: var(--glass-light);
   backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.9),
-    0 0 25px rgba(0, 0, 0, 0.4),
-    0 8px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255,255,255,0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: fadeIn 0.8s ease-in-out;
+  color: var(--text-color);
+  transition: all 0.4s ease;
 }
 
-/* Titelzeile im Windows-7-Aero-Stil */
+body.dark .msn-window {
+  background: var(--glass-dark);
+  border: 1px solid rgba(100,100,100,0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .title-bar {
-  background: linear-gradient(to bottom, #4598ff 0%, #1b67d3 100%);
+  background: var(--window-gradient);
   color: white;
   padding: 10px 14px;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 15px;
   letter-spacing: 0.3px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.6),
-    inset 0 -1px rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 -1px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 
-/* Online-Indikator mit Glow */
 .status-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   margin-left: 8px;
-  background-color: #00ff4c;
-  box-shadow: 0 0 10px #00ff4c, 0 0 3px rgba(0, 0, 0, 0.4);
+  background-color: #00ff00;
+  box-shadow: 0 0 8px rgba(0,255,0,0.6);
 }
 
-/* Nachrichtenbereich */
 .chat-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.7), rgba(235, 245, 255, 0.7));
+  background: linear-gradient(to bottom right, rgba(250,250,255,0.8), rgba(230,240,255,0.8));
 }
 
-/* Verlauf + Glas + sanfte Scrollbar */
+body.dark .chat-container {
+  background: linear-gradient(to bottom right, rgba(30,30,30,0.8), rgba(20,20,20,0.85));
+}
+
 .messages {
   flex: 1;
-  padding: 14px;
+  padding: 12px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #70b2ff #e6edf7;
+  scrollbar-color: var(--accent) transparent;
 }
 
 .messages::-webkit-scrollbar {
@@ -82,103 +132,92 @@ body {
 }
 
 .messages::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #69b0ff, #337ce3);
+  background-color: var(--accent);
   border-radius: 8px;
-  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
-/* Nachricht-Blasen */
 .message {
-  padding: 9px 12px;
-  background: rgba(255, 255, 255, 0.85);
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.75);
   border-radius: 10px;
-  margin-bottom: 10px;
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.9),
-    0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: all 0.15s ease-in-out;
-  backdrop-filter: blur(10px);
+  margin-bottom: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease-in-out;
+}
+
+body.dark .message {
+  background: rgba(60,60,60,0.75);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
 
 .message:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  transform: scale(1.02);
 }
 
-/* Systemmeldungen */
 .system {
-  color: #0066cc;
+  color: var(--accent);
   font-style: italic;
   margin-bottom: 8px;
-  text-shadow: 0 0 6px rgba(173, 216, 255, 0.7);
+  text-shadow: 0 0 6px rgba(173,216,255,0.8);
 }
 
-/* Eingabebereich */
 .input-area {
   display: flex;
   align-items: center;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(230, 235, 255, 0.9));
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(235,235,255,0.9));
   padding: 10px;
-  border-top: 1px solid rgba(200, 200, 255, 0.6);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(200,200,255,0.6);
+  box-shadow: inset 0 1px rgba(255,255,255,0.5);
 }
 
-/* Eingabefeld */
+body.dark .input-area {
+  background: linear-gradient(to bottom, rgba(45,45,45,0.9), rgba(25,25,25,0.95));
+  border-top: 1px solid rgba(70,70,70,0.8);
+}
+
 #message-input {
   flex: 1;
-  padding: 9px;
-  border: 1px solid rgba(150, 150, 200, 0.8);
+  padding: 8px;
+  border: 1px solid rgba(150,150,200,0.8);
   border-radius: 8px;
   outline: none;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease-in-out;
+  background: rgba(255,255,255,0.8);
 }
 
-#message-input:focus {
-  border-color: #58a6ff;
-  box-shadow: 0 0 6px rgba(88, 166, 255, 0.8);
+body.dark #message-input {
+  background: rgba(30,30,30,0.8);
+  color: #e8e8e8;
+  border: 1px solid rgba(100,100,100,0.8);
 }
 
-/* Anhang-Button 📎 */
 .upload-btn {
   margin: 0 8px;
   font-size: 22px;
   cursor: pointer;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
-  transition: transform 0.15s ease-in-out, filter 0.3s;
+  transition: transform 0.15s ease-in-out;
 }
 
 .upload-btn:hover {
-  transform: scale(1.15);
-  filter: drop-shadow(0 0 5px rgba(100, 180, 255, 0.7));
+  transform: scale(1.2);
 }
 
-/* Senden-Button */
 .send-btn {
-  background: linear-gradient(to bottom, #87c0ff, #2b75e2);
+  background: linear-gradient(to bottom, #7ab5ff, #3c8aff);
   color: white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: none;
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.4),
-    0 2px 4px rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(0,0,0,0.3);
   transition: all 0.2s ease-in-out;
 }
 
+body.dark .send-btn {
+  background: linear-gradient(to bottom, #444, #111);
+  text-shadow: 0 0 3px rgba(255,255,255,0.2);
+}
+
 .send-btn:hover {
-  background: linear-gradient(to bottom, #9dd0ff, #3f88f7);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
   transform: translateY(-1px);
 }
-
-/* Fade-In */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98) translateY(-10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
