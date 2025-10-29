@@ -3,42 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💬 LeonChat – Online</title>
+  <title>MSN 2009 – LeonChat</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="chatWindow" class="window">
+  <div class="msn-window">
     <div class="title-bar">
-      <span class="title">💬 LeonChat – Online</span>
-      <div class="window-controls">
-        <button class="minimize">🗕</button>
-        <button class="maximize">🗖</button>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Msn_icon.svg" class="msn-icon" />
+      <span class="title-text">LeonChat Messenger</span>
+      <div class="window-buttons">
+        <button class="min">🗕</button>
+        <button class="max">🗖</button>
         <button class="close">🗙</button>
       </div>
     </div>
 
-    <div class="chat-header">
-      <h2>Willkommen bei <span class="highlight">LeonChat</span> 👋</h2>
-      <div id="status">
-        <span id="statusDot" class="status-dot"></span> Verbunden
+    <div class="user-panel">
+      <img src="https://i.imgur.com/lPZg7cz.png" class="avatar" alt="User" />
+      <div class="user-info">
+        <h3>Leon J.</h3>
+        <p>Online 🟢</p>
       </div>
     </div>
 
-    <div id="chatBox" class="chat-box">
-      <!-- Nachrichten erscheinen hier -->
+    <div class="chat-area" id="chatBox">
+      <div class="message received">
+        <img src="https://i.imgur.com/lPZg7cz.png" class="bubble-avatar" />
+        <div class="bubble">Hey 👋 Willkommen im neuen MSN 2009-Style LeonChat!</div>
+      </div>
+      <div class="message sent">
+        <div class="bubble">Wow, das sieht ja richtig nach Windows 7 Ultimate aus ✨</div>
+      </div>
     </div>
 
-    <div class="input-area">
-      <input id="messageInput" type="text" placeholder="Nachricht eingeben..." />
+    <div class="input-bar">
       <button id="emojiButton">😊</button>
-      <input type="file" id="fileInput" style="display:none" />
+      <input type="text" id="messageInput" placeholder="Nachricht eingeben ..." />
       <button id="fileButton">📎</button>
       <button id="sendButton">Senden</button>
-    </div>
-
-    <div class="bottom-bar">
-      <label>
-        <input type="checkbox" id="themeSwitch" />
+      <label class="theme-switch">
+        <input type="checkbox" id="themeToggle" />
         🌞 / 🌙
       </label>
     </div>
