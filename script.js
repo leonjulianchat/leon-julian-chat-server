@@ -1,75 +1,85 @@
-// === LeonChat – MSN 2009 Style ===
+// 🌟 LeonChat – MSN 2009 Aero Script 🌟
+// Enthält Theme Switch, Datei-Upload und Nachrichtensystem
 
-// SOCKET.IO CONNECTION
-const socket = io("https://leon-julian-chat-server.onrender.com"); // dein Render-Server
-
-// === ELEMENTE HOLEN ===
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const chatBox = document.getElementById("chatBox");
+const body = document.body;
 const themeSwitch = document.getElementById("themeSwitch");
+const chatArea = document.querySelector(".chat-area");
+const sendBtn = document.getElementById("sendBtn");
+const msgInput = document.getElementById("msgInput");
 const fileInput = document.getElementById("fileInput");
-const onlineDot = document.getElementById("statusDot");
+const attachBtn = document.getElementById("attachBtn");
 
-// === SOUND ===
-const msnSound = new Audio("https://win98icons.alexmeub.com/sounds/MSN_Receive.mp3");
+let darkMode = false;
+let username = "Leon"; // später evtl. dynamisch z. B. über Login setzen
 
-// === THEME SWITCH ===
-themeSwitch.addEventListener("change", () => {
-  document.body.classList.toggle("dark", themeSwitch.checked);
-  localStorage.setItem("theme", themeSwitch.checked ? "dark" : "light");
+// 💡 Theme Toggle
+themeSwitch.addEventListener("click", () => {
+  darkMode = !darkMode;
+  body.classList.toggle("dark", darkMode);
+  themeSwitch.textContent = darkMode ? "🌞" : "🌙";
 });
 
-// Theme beim Laden merken
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-  themeSwitch.checked = true;
-}
-
-// === MESSAGE SENDEN ===
-sendButton.addEventListener("click", sendMessage);
-messageInput.addEventListener("keypress", (e) => {
+// 💬 Nachricht senden
+sendBtn.addEventListener("click", sendMessage);
+msgInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") sendMessage();
 });
 
 function sendMessage() {
-  const msg = messageInput.value.trim();
-  if (msg !== "") {
-    socket.emit("message", msg);
-    appendMessage("self", msg);
-    messageInput.value = "";
-  }
+  const text = msgInput.value.trim();
+  if (!text) return;
+
+  addMessage("sent", username, text);
+  playSendSound();
+
+  // hier könnte später Fetch oder WebSocket folgen:
+  // fetch("/send", {method: "POST", body: JSON.stringify({user: username, msg: text})});
+
+  msgInput.value = "";
 }
 
-// === DATEI-UPLOAD ===
+// 📎 Datei anhängen
+attachBtn.addEventListener("click", () => fileInput.click());
+
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
-  if (file) {
-    appendMessage("self", `📎 <i>${file.name}</i> wurde angehängt`);
-  }
+  if (!file) return;
+
+  const fileMsg = `<a href="#" class="file-link">📎 ${file.name}</a>`;
+  addMessage("sent", username, fileMsg, true);
+  playSendSound();
 });
 
-// === EMPFANGENE NACHRICHTEN ===
-socket.on("message", (msg) => {
-  appendMessage("other", msg);
-  msnSound.currentTime = 0;
-  msnSound.play().catch(() => {});
-});
-
-// === NACHRICHT IN CHAT-FENSTER ANZEIGEN ===
-function appendMessage(type, text) {
-  const msgEl = document.createElement("div");
-  msgEl.classList.add("message", type);
-  msgEl.innerHTML = text;
-  chatBox.appendChild(msgEl);
-  chatBox.scrollTop = chatBox.scrollHeight;
+// 🧩 Nachricht anzeigen
+function addMessage(type, user, content, isHTML = false) {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = `message ${type}`;
+  msgDiv.innerHTML = `
+    ${type === "received" ? '<img src="https://i.imgur.com/Z9qK2yV.png" class="bubble-avatar">' : ""}
+    <div class="bubble">${isHTML ? content : escapeHTML(content)}</div>
+    ${type === "sent" ? '<img src="https://i.imgur.com/Z9qK2yV.png" class="bubble-avatar">' : ""}
+  `;
+  chatArea.appendChild(msgDiv);
+  chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// === ONLINE-STATUS ===
-socket.on("connect", () => {
-  onlineDot.classList.add("online");
+// 🔉 Soundeffekt beim Senden
+function playSendSound() {
+  const audio = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_347cfb29e6.mp3");
+  audio.volume = 0.3;
+  audio.play();
+}
+
+// 🔒 HTML Escape
+function escapeHTML(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// 🌐 Dummy-Begrüßung beim Start
+window.addEventListener("load", () => {
+  addMessage("received", "Server", "👋 Willkommen bei <b>LeonChat</b> – der MSN 2009 Neuauflage!");
+  addMessage("received", "Server", "Du bist jetzt <b>online</b> 🟢");
 });
 
-socket.on("disconnect", () => {
-  onlineDot.classList.remove("online");
-});
