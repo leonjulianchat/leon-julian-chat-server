@@ -1,54 +1,47 @@
-alte script.js
-
 const socket = io("https://leon-julian-chat-server.onrender.com");
-let currentUser = null;
+const form = document.getElementById("chat-form");
+const input = document.getElementById("message-input");
+const messages = document.getElementById("messages");
+const themeToggleBtn = document.getElementById("theme-toggle-btn");
 
-// Login
-document.getElementById("login-btn").addEventListener("click", () => {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    if(!username || !password) return;
-
-    socket.emit("login", {username, password});
+// Dark/Light Mode speichern und laden
+document.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme") || "light";
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeToggleBtn.textContent = "🌙";
+  }
 });
 
-socket.on("login_success", (data) => {
-    currentUser = data.username;
-    document.getElementById("login-screen").classList.add("hidden");
-    document.getElementById("chat-screen").classList.remove("hidden");
-    updateContacts(data.contacts);
+themeToggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  themeToggleBtn.textContent = isDark ? "🌙" : "🌞";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
 });
 
-socket.on("login_error", (msg) => {
-    document.getElementById("login-error").innerText = msg;
+// Verbindung
+socket.on("connect", () => {
+  const msg = document.createElement("div");
+  msg.classList.add("system");
+  msg.textContent = "🟢 Verbunden mit LeonChat-Server.";
+  messages.appendChild(msg);
 });
 
-// Kontakte aktualisieren
-function updateContacts(list) {
-    const contactsUl = document.getElementById("contacts");
-    contactsUl.innerHTML = "";
-    list.forEach(user => {
-        const li = document.createElement("li");
-        li.innerText = user.username;
-        li.className = user.online ? "online" : "offline";
-        contactsUl.appendChild(li);
-    });
-}
-
-// Nachrichten senden
-document.getElementById("send-btn").addEventListener("click", () => {
-    const msgInput = document.getElementById("message-input");
-    const message = msgInput.value.trim();
-    if(!message) return;
-    socket.emit("send_message", {from: currentUser, message});
-    msgInput.value = "";
+// Nachricht empfangen
+socket.on("message", (data) => {
+  const msg = document.createElement("div");
+  msg.classList.add("message");
+  msg.innerHTML = `<strong>${data.user}:</strong> ${data.msg}`;
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
 });
 
-// Nachrichten empfangen
-socket.on("receive_message", (data) => {
-    const msgDiv = document.createElement("div");
-    msgDiv.className = "message" + (data.from === currentUser ? " self" : "");
-    msgDiv.innerText = `${data.from}: ${data.message}`;
-    document.getElementById("messages").appendChild(msgDiv);
-    msgDiv.scrollIntoView();
+// Nachricht senden
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (input.value.trim() !== "") {
+    socket.emit("message", { user: "Du", msg: input.value });
+    input.value = "";
+  }
 });
