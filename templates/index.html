@@ -3,59 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LeonChat – Messenger 2009</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <title>LeonChat – Online</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="msn-window">
-    <div class="title-bar">
-      <div class="window-title">LeonChat – Messenger</div>
-      <div class="status-dot online"></div>
+  <div class="window">
+    <div class="titlebar">
+      <div class="title">💬 LeonChat – Online</div>
+      <div class="window-controls">
+        <button class="minimize">🗕</button>
+        <button class="maximize">🗖</button>
+        <button class="close">🗙</button>
+      </div>
     </div>
 
     <div class="chat-container">
-      <div class="messages" id="messages"></div>
+      <div class="chat-box" id="chatBox">
+        <div class="message other">Willkommen bei <b>LeonChat</b> 💫</div>
+      </div>
 
-      <form id="chat-form">
-        <div class="input-area">
-          <input id="message-input" autocomplete="off" placeholder="Nachricht eingeben..." />
-          <label for="file-upload" class="upload-btn">📎</label>
-          <input id="file-upload" type="file" hidden />
-          <button type="submit" class="send-btn">Senden 💬</button>
-        </div>
-      </form>
+      <div class="input-area">
+        <input id="messageInput" type="text" placeholder="Nachricht eingeben..." />
+        <button id="emojiBtn">😊</button>
+        <button id="fileBtn">📎</button>
+        <button id="sendBtn">Senden</button>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status">
+        <span class="status-dot online"></span> Verbunden
+      </div>
+      <div class="theme-toggle">
+        <label class="switch">
+          <input type="checkbox" id="themeSwitch" />
+          <span class="slider"></span>
+        </label>
+        <span class="theme-label">🌞 / 🌙</span>
+      </div>
     </div>
   </div>
 
-  <script>
-    const socket = io();
-    const form = document.getElementById("chat-form");
-    const input = document.getElementById("message-input");
-    const messages = document.getElementById("messages");
-
-    socket.on("connect", () => {
-      const msg = document.createElement("div");
-      msg.classList.add("system");
-      msg.textContent = "🟢 Verbunden mit LeonChat-Server.";
-      messages.appendChild(msg);
-    });
-
-    socket.on("message", (data) => {
-      const msg = document.createElement("div");
-      msg.classList.add("message");
-      msg.innerHTML = `<strong>${data.user}:</strong> ${data.msg}`;
-      messages.appendChild(msg);
-      messages.scrollTop = messages.scrollHeight;
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (input.value.trim() !== "") {
-        socket.emit("message", { user: "Du", msg: input.value });
-        input.value = "";
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
