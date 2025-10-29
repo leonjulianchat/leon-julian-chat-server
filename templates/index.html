@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LeonChat – Messenger 2009</title>
+  <title>LeonChat – Messenger 2009 Ultimate</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
 <body>
+  <div class="theme-toggle">
+    <button id="theme-toggle-btn" title="Modus wechseln">🌞</button>
+  </div>
+
   <div class="msn-window">
     <div class="title-bar">
       <div class="window-title">LeonChat – Messenger</div>
@@ -28,34 +32,6 @@
     </div>
   </div>
 
-  <script>
-    const socket = io();
-    const form = document.getElementById("chat-form");
-    const input = document.getElementById("message-input");
-    const messages = document.getElementById("messages");
-
-    socket.on("connect", () => {
-      const msg = document.createElement("div");
-      msg.classList.add("system");
-      msg.textContent = "🟢 Verbunden mit LeonChat-Server.";
-      messages.appendChild(msg);
-    });
-
-    socket.on("message", (data) => {
-      const msg = document.createElement("div");
-      msg.classList.add("message");
-      msg.innerHTML = `<strong>${data.user}:</strong> ${data.msg}`;
-      messages.appendChild(msg);
-      messages.scrollTop = messages.scrollHeight;
-    });
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (input.value.trim() !== "") {
-        socket.emit("message", { user: "Du", msg: input.value });
-        input.value = "";
-      }
-    });
-  </script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
