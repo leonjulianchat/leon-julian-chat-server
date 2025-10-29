@@ -1,85 +1,54 @@
-// 🌟 LeonChat – MSN 2009 Aero Script 🌟
-// Enthält Theme Switch, Datei-Upload und Nachrichtensystem
+alte script.js
 
-const body = document.body;
-const themeSwitch = document.getElementById("themeSwitch");
-const chatArea = document.querySelector(".chat-area");
-const sendBtn = document.getElementById("sendBtn");
-const msgInput = document.getElementById("msgInput");
-const fileInput = document.getElementById("fileInput");
-const attachBtn = document.getElementById("attachBtn");
+const socket = io("https://leon-julian-chat-server.onrender.com");
+let currentUser = null;
 
-let darkMode = false;
-let username = "Leon"; // später evtl. dynamisch z. B. über Login setzen
+// Login
+document.getElementById("login-btn").addEventListener("click", () => {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    if(!username || !password) return;
 
-// 💡 Theme Toggle
-themeSwitch.addEventListener("click", () => {
-  darkMode = !darkMode;
-  body.classList.toggle("dark", darkMode);
-  themeSwitch.textContent = darkMode ? "🌞" : "🌙";
+    socket.emit("login", {username, password});
 });
 
-// 💬 Nachricht senden
-sendBtn.addEventListener("click", sendMessage);
-msgInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
+socket.on("login_success", (data) => {
+    currentUser = data.username;
+    document.getElementById("login-screen").classList.add("hidden");
+    document.getElementById("chat-screen").classList.remove("hidden");
+    updateContacts(data.contacts);
 });
 
-function sendMessage() {
-  const text = msgInput.value.trim();
-  if (!text) return;
-
-  addMessage("sent", username, text);
-  playSendSound();
-
-  // hier könnte später Fetch oder WebSocket folgen:
-  // fetch("/send", {method: "POST", body: JSON.stringify({user: username, msg: text})});
-
-  msgInput.value = "";
-}
-
-// 📎 Datei anhängen
-attachBtn.addEventListener("click", () => fileInput.click());
-
-fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
-  if (!file) return;
-
-  const fileMsg = `<a href="#" class="file-link">📎 ${file.name}</a>`;
-  addMessage("sent", username, fileMsg, true);
-  playSendSound();
+socket.on("login_error", (msg) => {
+    document.getElementById("login-error").innerText = msg;
 });
 
-// 🧩 Nachricht anzeigen
-function addMessage(type, user, content, isHTML = false) {
-  const msgDiv = document.createElement("div");
-  msgDiv.className = `message ${type}`;
-  msgDiv.innerHTML = `
-    ${type === "received" ? '<img src="https://i.imgur.com/Z9qK2yV.png" class="bubble-avatar">' : ""}
-    <div class="bubble">${isHTML ? content : escapeHTML(content)}</div>
-    ${type === "sent" ? '<img src="https://i.imgur.com/Z9qK2yV.png" class="bubble-avatar">' : ""}
-  `;
-  chatArea.appendChild(msgDiv);
-  chatArea.scrollTop = chatArea.scrollHeight;
+// Kontakte aktualisieren
+function updateContacts(list) {
+    const contactsUl = document.getElementById("contacts");
+    contactsUl.innerHTML = "";
+    list.forEach(user => {
+        const li = document.createElement("li");
+        li.innerText = user.username;
+        li.className = user.online ? "online" : "offline";
+        contactsUl.appendChild(li);
+    });
 }
 
-// 🔉 Soundeffekt beim Senden
-function playSendSound() {
-  const audio = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_347cfb29e6.mp3");
-  audio.volume = 0.3;
-  audio.play();
-}
-
-// 🔒 HTML Escape
-function escapeHTML(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-// 🌐 Dummy-Begrüßung beim Start
-window.addEventListener("load", () => {
-  addMessage("received", "Server", "👋 Willkommen bei <b>LeonChat</b> – der MSN 2009 Neuauflage!");
-  addMessage("received", "Server", "Du bist jetzt <b>online</b> 🟢");
+// Nachrichten senden
+document.getElementById("send-btn").addEventListener("click", () => {
+    const msgInput = document.getElementById("message-input");
+    const message = msgInput.value.trim();
+    if(!message) return;
+    socket.emit("send_message", {from: currentUser, message});
+    msgInput.value = "";
 });
 
+// Nachrichten empfangen
+socket.on("receive_message", (data) => {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "message" + (data.from === currentUser ? " self" : "");
+    msgDiv.innerText = `${data.from}: ${data.message}`;
+    document.getElementById("messages").appendChild(msgDiv);
+    msgDiv.scrollIntoView();
+});
