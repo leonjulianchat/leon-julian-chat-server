@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>LeonChat – Anmeldung</title>
+    <link rel="stylesheet" href="/static/login.css">
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="glass-box">
+
+        <img src="/static/user.png" class="avatar" alt="User Avatar">
+
+        <h2>Willkommen</h2>
+
+        <form action="/login" method="POST">
+
+            <input 
+                type="text" 
+                name="username" 
+                placeholder="Benutzername" 
+                required 
+                class="input">
+
+            <input 
+                type="password" 
+                name="password" 
+                placeholder="Kennwort" 
+                required 
+                class="input">
+
+            <button class="login-btn">Anmelden</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
