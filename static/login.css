@@ -1,0 +1,69 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background: url("https://wallpapercave.com/wp/wp1817982.jpg") center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    font-family: Segoe UI, sans-serif;
+}
+
+/* Container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Aero-Glass Box */
+.glass-box {
+    width: 350px;
+    padding: 40px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
+    text-align: center;
+}
+
+/* Avatar */
+.avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 2px solid rgba(255,255,255,0.7);
+}
+
+/* Inputs */
+.input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.5);
+    outline: none;
+    background: rgba(255,255,255,0.5);
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+    font-size: 16px;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: linear-gradient(#6cb5ff, #3e8be0);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.login-btn:hover {
+    background: linear-gradient(#7ec0ff, #4b97f0);
+}
